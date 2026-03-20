@@ -27,3 +27,19 @@
     font-family: var(--font-secondary);
   }
 }
+body {
+  position: relative;
+  background-color: #0B0F14;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url('/images/background.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+}
