@@ -8,7 +8,7 @@ export default function Header({ name }) {
         <img 
           src="/images/logo.png" 
           alt="Mentalidad & Mercado FX"
-          className="w-32 h-32 object-contain mb-2"
+          className="w-40 h-40 object-contain mb-2"
         />
       </div>
 
