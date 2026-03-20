@@ -16,6 +16,12 @@ import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import Layout, { GradientBackground } from '../../components/Layout';
 import SEO from '../../components/SEO';
+import {
+  SocialFollowButtons,
+  SocialShareButtons,
+} from '../../components/SocialButtons';
+import { formatPostDate } from '../../utils/date-utils';
+import GiscusComments from '../../components/Comments/GiscusComments';
 
 // Custom components/renderers to pass to MDX.
 // Since the MDX files aren't loaded by webpack, they have no knowledge of how
@@ -36,12 +42,27 @@ export default function PostPage({
   prevPost,
   nextPost,
   globalData,
+  slug,
 }) {
+  const pageUrl = globalData?.siteUrl
+    ? `${globalData.siteUrl}/posts/${slug}`
+    : '';
+
+  const summary = frontMatter.description || frontMatter.excerpt || '';
+  const coverImage = frontMatter.coverImage || frontMatter.image || '';
+  const resolvedImage =
+    coverImage && globalData?.siteUrl && !coverImage.startsWith('http')
+      ? `${globalData.siteUrl}${coverImage}`
+      : coverImage || undefined;
+
   return (
     <Layout>
       <SEO
         title={`${frontMatter.title} - ${globalData.name}`}
-        description={frontMatter.description}
+        description={summary}
+        url={pageUrl || undefined}
+        image={resolvedImage}
+        type="article"
       />
       <Header name={globalData.name} />
       <article className="px-6 md:px-0">
@@ -49,18 +70,33 @@ export default function PostPage({
           <h1 className="mb-8 text-2xl text-center md:text-3xl dark:text-white font-semibold">
             {frontMatter.title}
           </h1>
-<p className="text-center text-sm text-gray-400 mb-4">
-  {new Date(frontMatter.date).toLocaleString('es-ES', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit'
-  })}
-</p>
-          {frontMatter.description && (
+          <p className="text-center text-sm text-gray-400 mb-4">
+            {formatPostDate(frontMatter.date)}
+          </p>
+
+          <div className="mb-6 flex flex-col items-center gap-4">
+            <div className="w-full flex flex-col items-center gap-2">
+              <p className="text-center text-xs font-bold uppercase opacity-60">
+                Síguenos
+              </p>
+              <SocialFollowButtons social={globalData.social} />
+            </div>
+
+            <div className="w-full border-t border-gray-800/10" />
+
+            <div className="w-full flex flex-col items-center gap-2">
+              <p className="text-center text-xs font-bold uppercase opacity-60">
+                Compartir este blog
+              </p>
+              <SocialShareButtons
+                pageUrl={pageUrl}
+                title={frontMatter.title}
+              />
+            </div>
+          </div>
+          {summary && (
             <p className="mb-4 text-xl">
-              {frontMatter.description}
+              {summary}
             </p>
           )}
         </header>
@@ -99,6 +135,19 @@ export default function PostPage({
             </Link>
           )}
         </div>
+
+        <section className="mt-12 w-full">
+          <div className="mb-4 text-center">
+            <p className="text-xs font-bold uppercase opacity-60">Comentarios</p>
+            <h2 className="mt-2 text-2xl font-semibold dark:text-white">
+              ¿Qué opinas de este escenario?
+            </h2>
+            <p className="mt-2 text-gray-600 dark:text-gray-300">
+              Déjame tu lectura del mercado y tu plan de acción.
+            </p>
+          </div>
+          <GiscusComments term={slug} />
+        </section>
       </article>
       <Footer copyrightText={globalData.footerText} />
       <GradientBackground
@@ -126,6 +175,7 @@ export const getStaticProps = async ({ params }) => {
       frontMatter: data,
       prevPost,
       nextPost,
+      slug: params.slug,
     },
   };
 };
