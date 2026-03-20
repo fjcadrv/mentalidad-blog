@@ -49,6 +49,15 @@ export default function PostPage({
           <h1 className="mb-8 text-2xl text-center md:text-3xl dark:text-white font-semibold">
             {frontMatter.title}
           </h1>
+<p className="text-center text-sm text-gray-400 mb-4">
+  {new Date(frontMatter.date).toLocaleString('es-ES', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit'
+  })}
+</p>
           {frontMatter.description && (
             <p className="mb-4 text-xl">
               {frontMatter.description}
