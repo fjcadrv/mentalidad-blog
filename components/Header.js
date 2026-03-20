@@ -3,7 +3,11 @@ import Link from 'next/link';
 export default function Header({ name }) {
   return (
     <header className="pt-20 pb-12">
-      <div className="block w-12 h-12 mx-auto mb-4 rounded-full bg-conic-180 from-gradient-3 from-0% to-gradient-4 to-100%" />
+     <img 
+  src="/images/logo.png" 
+  alt="Mentalidad & Mercado FX"
+  className="w-20 h-20 mx-auto mb-2 object-contain"
+/>
       <p className="text-4xl font-semibold text-center dark:text-white">
         <Link href="/">{name}</Link>
       </p>
