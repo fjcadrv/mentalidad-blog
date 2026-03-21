@@ -13,6 +13,7 @@ import ArrowIcon from '../../components/ArrowIcon';
 import CustomImage from '../../components/CustomImage';
 import CustomLink from '../../components/CustomLink';
 import Footer from '../../components/Footer';
+import NewsletterForm from '../../components/NewsletterForm';
 import Header from '../../components/Header';
 import Layout, { GradientBackground } from '../../components/Layout';
 import SEO from '../../components/SEO';
@@ -21,6 +22,7 @@ import {
   SocialShareButtons,
 } from '../../components/SocialButtons';
 import { formatPostDate } from '../../utils/date-utils';
+import { SesgoBadge, ParBadge, CategoriaBadge } from '../../components/PostBadges';
 import GiscusComments from '../../components/Comments/GiscusComments';
 
 // Custom components/renderers to pass to MDX.
@@ -67,6 +69,29 @@ export default function PostPage({
       <Header name={globalData.name} />
       <article className="px-6 md:px-0">
         <header>
+          {/* Imagen de portada */}
+          {(frontMatter.coverImage || frontMatter.image) && (
+            <div className="w-full h-56 rounded-2xl overflow-hidden mb-6">
+              <img
+                src={frontMatter.coverImage || frontMatter.image}
+                alt={frontMatter.title}
+                className="w-full h-full object-cover opacity-90"
+                onError={(e) => { e.target.parentNode.style.display = 'none'; }}
+              />
+            </div>
+          )}
+
+          {/* Badges de sesgo y par */}
+          {(frontMatter.sesgo || frontMatter.par || frontMatter.categoria) && (
+            <div className="flex flex-wrap justify-center gap-2 mb-5">
+              {frontMatter.categoria && <CategoriaBadge categoria={frontMatter.categoria} size="lg" />}
+              {frontMatter.par && <ParBadge par={frontMatter.par} size="lg" />}
+              {frontMatter.sesgo && (
+                <SesgoBadge sesgo={frontMatter.sesgo} probabilidad={frontMatter.probabilidad} size="lg" />
+              )}
+            </div>
+          )}
+
           <h1 className="mb-8 text-2xl text-center md:text-3xl dark:text-white font-semibold">
             {frontMatter.title}
           </h1>
@@ -149,6 +174,7 @@ export default function PostPage({
           <GiscusComments term={slug} />
         </section>
       </article>
+      <NewsletterForm />
       <Footer copyrightText={globalData.footerText} />
       <GradientBackground
         variant="large"

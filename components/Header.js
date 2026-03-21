@@ -3,10 +3,9 @@ import Link from 'next/link';
 export default function Header({ name }) {
   return (
     <header className="pt-16 pb-10 text-center">
-      
       <div className="flex flex-col items-center mb-4">
-        <img 
-          src="/images/logo.png" 
+        <img
+          src="/images/logo.png"
           alt="Mentalidad & Mercado FX"
           className="w-45 h-45 object-contain mb-2"
         />
@@ -16,6 +15,20 @@ export default function Header({ name }) {
         <Link href="/">{name}</Link>
       </h1>
 
+      <nav className="mt-4 flex items-center justify-center gap-6">
+        <Link
+          href="/"
+          className="text-sm font-semibold uppercase tracking-widest opacity-60 hover:opacity-100 transition dark:text-white"
+        >
+          Análisis
+        </Link>
+        <Link
+          href="/sobre-mi"
+          className="text-sm font-semibold uppercase tracking-widest opacity-60 hover:opacity-100 transition dark:text-white"
+        >
+          Sobre mí
+        </Link>
+      </nav>
     </header>
   );
 }

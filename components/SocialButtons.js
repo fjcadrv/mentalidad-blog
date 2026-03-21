@@ -104,31 +104,26 @@ const TikTokIcon = () => (
   </IconWrap>
 );
 
+// ─── Botones de SEGUIR (van en el Footer del Home) ───────────────────────────
+// Solo muestra las redes que tienen URL configurada en global-data.js
 export function SocialFollowButtons({ social, className }) {
   const followNetworks = [
-    { key: 'facebook', label: 'Facebook', url: social?.facebook, icon: <FacebookIcon /> },
-    { key: 'x', label: 'X', url: social?.x, icon: <XIcon /> },
-    { key: 'linkedin', label: 'LinkedIn', url: social?.linkedin, icon: <LinkedInIcon /> },
-    { key: 'whatsapp', label: 'WhatsApp', url: social?.whatsapp, icon: <WhatsAppIcon /> },
-    { key: 'telegram', label: 'Telegram', url: social?.telegram, icon: <TelegramIcon /> },
+    { key: 'facebook',  label: 'Facebook',  url: social?.facebook,  icon: <FacebookIcon /> },
+    { key: 'x',         label: 'X',         url: social?.x,         icon: <XIcon /> },
+    { key: 'linkedin',  label: 'LinkedIn',  url: social?.linkedin,  icon: <LinkedInIcon /> },
+    { key: 'whatsapp',  label: 'WhatsApp',  url: social?.whatsapp,  icon: <WhatsAppIcon /> },
+    { key: 'telegram',  label: 'Telegram',  url: social?.telegram,  icon: <TelegramIcon /> },
     { key: 'instagram', label: 'Instagram', url: social?.instagram, icon: <InstagramIcon /> },
-    { key: 'youtube', label: 'YouTube', url: social?.youtube, icon: <YouTubeIcon /> },
-    { key: 'tiktok', label: 'TikTok', url: social?.tiktok, icon: <TikTokIcon /> },
-  ];
+    { key: 'youtube',   label: 'YouTube',   url: social?.youtube,   icon: <YouTubeIcon /> },
+    { key: 'tiktok',    label: 'TikTok',    url: social?.tiktok,    icon: <TikTokIcon /> },
+  ].filter((n) => n.url);
+
+  if (followNetworks.length === 0) return null;
 
   return (
     <div className={className ?? 'flex flex-wrap items-center justify-center gap-3'}>
       {followNetworks.map((n) => (
-        <ButtonBase
-          key={n.key}
-          href={n.url || undefined}
-          disabled={!n.url}
-          ariaLabel={`Síguenos en ${n.label}`}
-          onClick={() => {
-            // UX: cuando falte config, al menos avisa.
-            if (!n.url) alert(`Configura ${n.label} en las variables de entorno (SOCIAL_${n.key.toUpperCase()}_URL).`);
-          }}
-        >
+        <ButtonBase key={n.key} href={n.url} ariaLabel={`Síguenos en ${n.label}`}>
           {n.icon}
         </ButtonBase>
       ))}
@@ -136,6 +131,8 @@ export function SocialFollowButtons({ social, className }) {
   );
 }
 
+// ─── Botones de COMPARTIR (van dentro de cada post) ──────────────────────────
+// Solo Facebook, X, WhatsApp y Telegram tienen URL real de compartir.
 export function SocialShareButtons({ pageUrl, title, className }) {
   const [resolvedUrl, setResolvedUrl] = useState(pageUrl || '');
 
@@ -147,6 +144,7 @@ export function SocialShareButtons({ pageUrl, title, className }) {
   }, []);
 
   const shareText = title ? `${title}` : 'Artículo';
+  const canShare = Boolean(resolvedUrl);
 
   const shareNetworks = [
     {
@@ -181,38 +179,7 @@ export function SocialShareButtons({ pageUrl, title, className }) {
         : undefined,
       icon: <TelegramIcon />,
     },
-    {
-      key: 'instagram',
-      label: 'Instagram',
-      // Instagram doesn't provide a reliable generic "share URL" for posts/articles.
-      // Best-effort: open the Direct message composer with prefilled text.
-      href: resolvedUrl
-        ? `https://www.instagram.com/direct/new/?text=${encodeURIComponent(`${shareText}\n${resolvedUrl}`)}`
-        : undefined,
-      icon: <InstagramIcon />,
-    },
   ];
-
-  const canShare = Boolean(resolvedUrl);
-
-  const copyLink = async () => {
-    try {
-      if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(resolvedUrl);
-      } else {
-        // Fallback simple.
-        const input = document.createElement('input');
-        input.value = resolvedUrl;
-        document.body.appendChild(input);
-        input.select();
-        document.execCommand('copy');
-        document.body.removeChild(input);
-      }
-      alert('Enlace copiado.');
-    } catch (e) {
-      alert('No se pudo copiar el enlace. Copia manualmente desde la barra de direcciones.');
-    }
-  };
 
   return (
     <div className={className ?? 'flex flex-wrap items-center justify-center gap-3'}>
@@ -226,29 +193,6 @@ export function SocialShareButtons({ pageUrl, title, className }) {
           {n.icon}
         </ButtonBase>
       ))}
-
-      <ButtonBase
-        disabled={!canShare}
-        ariaLabel="YouTube (copiar enlace)"
-        onClick={() => {
-          if (!canShare) return;
-          copyLink();
-        }}
-      >
-        <YouTubeIcon />
-      </ButtonBase>
-
-      <ButtonBase
-        disabled={!canShare}
-        ariaLabel="TikTok (copiar enlace)"
-        onClick={() => {
-          if (!canShare) return;
-          copyLink();
-        }}
-      >
-        <TikTokIcon />
-      </ButtonBase>
     </div>
   );
 }
-
