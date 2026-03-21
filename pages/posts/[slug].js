@@ -17,10 +17,7 @@ import NewsletterForm from '../../components/NewsletterForm';
 import Header from '../../components/Header';
 import Layout, { GradientBackground } from '../../components/Layout';
 import SEO from '../../components/SEO';
-import {
-  SocialFollowButtons,
-  SocialShareButtons,
-} from '../../components/SocialButtons';
+import { SocialShareButtons } from '../../components/SocialButtons';
 import { formatPostDate } from '../../utils/date-utils';
 import { SesgoBadge, ParBadge, CategoriaBadge } from '../../components/PostBadges';
 import GiscusComments from '../../components/Comments/GiscusComments';
@@ -99,26 +96,7 @@ export default function PostPage({
             {formatPostDate(frontMatter.date)}
           </p>
 
-          <div className="mb-6 flex flex-col items-center gap-4">
-            <div className="w-full flex flex-col items-center gap-2">
-              <p className="text-center text-xs font-bold uppercase opacity-60">
-                Síguenos
-              </p>
-              <SocialFollowButtons social={globalData.social} />
-            </div>
 
-            <div className="w-full border-t border-gray-800/10" />
-
-            <div className="w-full flex flex-col items-center gap-2">
-              <p className="text-center text-xs font-bold uppercase opacity-60">
-                Compartir este blog
-              </p>
-              <SocialShareButtons
-                pageUrl={pageUrl}
-                title={frontMatter.title}
-              />
-            </div>
-          </div>
           {summary && (
             <p className="mb-4 text-xl">
               {summary}
@@ -174,6 +152,15 @@ export default function PostPage({
           <GiscusComments term={slug} />
         </section>
       </article>
+      <div className="w-full flex flex-col items-center gap-3 mt-10 mb-4">
+        <p className="text-center text-xs font-bold uppercase opacity-60 dark:text-white">
+          Compartir este artículo
+        </p>
+        <SocialShareButtons
+          pageUrl={pageUrl}
+          title={frontMatter.title}
+        />
+      </div>
       <NewsletterForm />
       <Footer copyrightText={globalData.footerText} />
       <GradientBackground
