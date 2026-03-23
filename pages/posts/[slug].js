@@ -21,6 +21,7 @@ import { SocialShareButtons } from '../../components/SocialButtons';
 import { formatPostDate } from '../../utils/date-utils';
 import { SesgoBadge, ParBadge, CategoriaBadge } from '../../components/PostBadges';
 import GiscusComments from '../../components/Comments/GiscusComments';
+import YoutubeEmbed from '../../components/YoutubeEmbed';
 
 // Custom components/renderers to pass to MDX.
 // Since the MDX files aren't loaded by webpack, they have no knowledge of how
@@ -28,11 +29,9 @@ import GiscusComments from '../../components/Comments/GiscusComments';
 // here.
 const components = {
   a: CustomLink,
-  // It also works with dynamically-imported components, which is especially
-  // useful for conditionally loading components for certain routes.
-  // See the notes in README.md for more details.
   Head,
   img: CustomImage,
+  YoutubeEmbed,
 };
 
 export default function PostPage({
@@ -68,11 +67,11 @@ export default function PostPage({
         <header>
           {/* Imagen de portada */}
           {(frontMatter.coverImage || frontMatter.image) && (
-            <div className="w-full h-56 rounded-2xl overflow-hidden mb-6">
+            <div className="w-full rounded-2xl overflow-hidden mb-6">
               <img
                 src={frontMatter.coverImage || frontMatter.image}
                 alt={frontMatter.title}
-                className="w-full h-full object-cover opacity-90"
+                className="w-full h-auto object-contain opacity-90"
                 onError={(e) => { e.target.parentNode.style.display = 'none'; }}
               />
             </div>

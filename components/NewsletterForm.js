@@ -33,10 +33,10 @@ export default function NewsletterForm() {
           scrolling="no"
           style={{
             width: '100%',
-            maxWidth: '448px',
-            height: '291px',
+            maxWidth: '560px',
+            height: '207px',
             margin: '0',
-            borderRadius: '12px',
+            borderRadius: '0px',
             backgroundColor: 'transparent',
             boxShadow: 'none',
           }}
